@@ -1,0 +1,72 @@
+/* assets/style.css */
+
+.header {
+    font-family: "Century Gothic", sans-serif;
+    background-color: #222222;
+    height: 220px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.header-title {
+    color: #FFFFFF;
+    font-size: 40px;
+    text-align: center;
+    margin: 0 auto;
+}
+
+.main-content {
+    margin-left: auto;
+    margin-right: auto;
+    width: 40%
+}
+
+.filters {
+    display: grid;
+    margin-top: 2%;
+    grid-template-columns: 1fr 0.5fr;
+    grid-gap: 1em;
+    border: 1px solid grey;
+    border-radius: 5px;
+    background-color: #f8f8f8;
+}
+
+.search {
+    padding: 5px 5px 5px 5px;
+}
+
+.search-tip {
+    margin-top: 1px;
+}
+
+.search-bar {
+    height: 30px;
+    width: 100%
+}
+
+.year-dropdown {
+    height: 25px;
+    padding: 5px 5px 5px 5px;
+/*    margin-right: 0;
+    margin-left: auto;
+    margin-bottom: 0;
+    margin-top: auto; */
+
+}
+
+.table {
+    padding-top: 8px;
+}
+
+.footer {
+    width: 40%;
+    margin-top: 5px;
+    margin-left: auto;
+    margin-right: auto;
+    background-color: #f2efe9;
+    text-align: center;
+    font-size:12px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+}
