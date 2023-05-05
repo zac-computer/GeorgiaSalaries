@@ -12,8 +12,19 @@ df_init = all_salaries.query("Name == 'Kirby Smart' & `Fiscal Year` == 2022")
 # define a format for salaries
 money = dash_table.FormatTemplate.money(0)
 
+# add external font stylesheet
+external_stylesheets = [
+    {
+        "href": (
+            "https://fonts.googleapis.com/css2?"
+            "family=Lato:wght@400;700&display=swap"
+        ),
+        "rel": "stylesheet",
+    }
+]
+
 # I should make a visual of the layout
-app = Dash(__name__)
+app = Dash(__name__, external_stylesheets=external_stylesheets)
 app.title = 'GA Salaries'
 app.layout = html.Div(
     children=[  # header
@@ -45,11 +56,11 @@ app.layout = html.Div(
                     dict(id='Fiscal Year', name='Fiscal Year', type='numeric')
                 ],
                 data=df_init.to_dict("records"),
-                style_cell={'textAlign': 'left'},
+                style_cell={'textAlign': 'left', 'font-family': '"Lato", sans-serif', 'fontSize': 12},
                 style_data_conditional=[
                     {
                         'if': {'row_index': 'odd'},
-                        'backgroundColor': 'rgb(250, 250, 235)',  # stripe rows
+                        'backgroundColor': 'RGB(200, 220, 240)',  # stripe rows
                     }
                 ]
             ),
