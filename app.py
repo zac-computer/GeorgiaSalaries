@@ -23,12 +23,16 @@ app.layout = html.Div(
         html.Div(children=[  # main content
             html.Div(children=[  # filters
                 html.Div(children=[  # search bar and text tip
+                    html.Div('What Name or Position Are You Looking For?',
+                             className='search-tip'),
                     dcc.Input(value='Kirby Smart', type='text', minLength=3, debounce=False, id='my-dynamic-input',
-                              className='search-bar'),
-                    html.Div('Filter by name or title. Enter least 3 characters to filter.', className='search-tip'),
-                ], className='search'),
-                dcc.Dropdown(value=2022, options=options, id='my-year-dropdown', maxHeight=200, searchable=False,
-                             className='year-dropdown')
+                              className='search-bar')
+                ], className='search-filter'),
+                html.Div(children=[  # year dropdown and text above
+                    html.Div("Year"),
+                    dcc.Dropdown(value=2022, options=options, id='my-year-dropdown', maxHeight=200, searchable=False,
+                                 className='year-dropdown')
+                ], className="year-filter")
             ], className='filters'
             ),
             html.Div(children=
