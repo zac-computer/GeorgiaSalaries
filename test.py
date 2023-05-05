@@ -2,25 +2,9 @@
 from process_data import all_salaries  # import data processing script to get salary df. Replace with i/o
 from dash import Dash, dash_table, html, dcc, callback, Output, Input
 from dash.exceptions import PreventUpdate
-import numpy as np
 
 # create a list of fiscal year dropdown options
 options = list(range(2013, 2023))
-
-# separately sort dataframe by year so displayed
-#  results table appears in chronological order
-all_salaries = all_salaries.sort_values(by=['FISCAL_YEAR', 'SALARY'], ascending=[True, False])
-
-# only keep relevant columns
-# this should be done in data processing script
-all_salaries = all_salaries[['NAME', 'TITLE', 'SALARY', 'FISCAL_YEAR']]
-
-# rename columns
-# this should be done in data processing script
-all_salaries = all_salaries.rename(columns={'NAME': 'Name',
-                                            'TITLE': 'Title',
-                                            'SALARY': 'Salary',
-                                            'FISCAL_YEAR': 'Fiscal Year'})
 
 # create a small initial dataframe to not overwhelm the server!
 df_init = all_salaries.query("Name == 'Kirby Smart' & `Fiscal Year` == 2022")
@@ -75,11 +59,10 @@ app.layout = html.Div(
 # callback to filter by year and name and title
 """
 potential performance improvements:
-1. Filter first by year, then filter by name (create an intermediate df before returning)
+1. [x] Filter first by year, then filter by name (create an intermediate df before returning)
 2. save the start-stop indices for each year in a dictionary
-3. Commit to displayoing one year at a time and save each year's data in a separate df
+3. Commit to displaying one year at a time and save each year's data in a separate df
 """
-
 
 @app.callback(
     Output("tbl", "data"),
@@ -95,24 +78,6 @@ def display_table(year_value, name_value):
     dff = df_year[(df_year['Name'].str.contains(name_value, case=False, regex=False)
                    | (df_year['Title'].str.contains(name_value, case=False, regex=False)))]
     return dff.to_dict("records")
-
-
-# create a separate series to hold lowercase names. This will prevent .lower() being called every filter
-# don't think it sped things up much
-# lowercase_names = all_salaries['Name'].str.lower()
-
-
-# @app.callback(
-#     Output("tbl", "data"),
-#     Input("my-dynamic-input", "value")
-# )
-# def display_table(value):
-#     if not value:
-#         raise PreventUpdate
-#     if len(value) < 3:
-#         raise PreventUpdate
-#     dff = all_salaries[lowercase_names.str.contains(value, regex=False, case=False)]
-#     return dff.to_dict("records")
 
 
 if __name__ == '__main__':

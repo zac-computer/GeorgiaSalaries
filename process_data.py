@@ -65,4 +65,18 @@ all_salaries['TITLE'] = (all_salaries['TITLE'].fillna('None')
                                               .apply(str.title))
 
 
+#  sort dataframe by year so displayed
+#  results table appears in chronological order
+all_salaries = all_salaries.sort_values(by=['FISCAL_YEAR', 'SALARY'], ascending=[True, False])
+
+# only keep columns relevant to dashboard
+all_salaries = all_salaries[['NAME', 'TITLE', 'SALARY', 'FISCAL_YEAR']]
+
+# rename columns
+all_salaries = all_salaries.rename(columns={'NAME': 'Name',
+                                            'TITLE': 'Title',
+                                            'SALARY': 'Salary',
+                                            'FISCAL_YEAR': 'Fiscal Year'})
+
+
 
