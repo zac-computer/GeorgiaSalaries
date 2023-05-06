@@ -11,7 +11,7 @@
 
 .header-title {
     color: #FFFFFF;
-    font-size: 40px;
+    font-size: 2.5em;
     text-align: center;
     margin: 0 auto;
 }
@@ -71,7 +71,7 @@
     background-color: #79a2f2;
     color: #FFFFFF;
     text-align: center;
-    font-size:12px;
+    font-size: .75em;
     font-family: "Lato", sans-serif;
     padding-top: 10px;
     padding-bottom: 10px;

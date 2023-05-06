@@ -52,6 +52,7 @@ app.layout = html.Div(
                 columns=[
                     dict(id='Name', name='Name'),
                     dict(id='Title', name='Title'),
+                    dict(id='Organization', name='Organization'),
                     dict(id='Salary', name='Salary', type='numeric', format=money),
                     dict(id='Fiscal Year', name='Fiscal Year', type='numeric')
                 ],
