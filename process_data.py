@@ -4,6 +4,7 @@ with the eventual goal of creating a dashboard to visualize salary data
 """
 
 import pandas as pd
+import pickle
 
 # Is it more efficient to parse all three names at once?
 def get_last(name):
@@ -81,6 +82,9 @@ all_salaries = all_salaries.rename(columns={'NAME': 'Name',
                                             'ORGANIZATION': 'Organization',
                                             'SALARY': 'Salary',
                                             'FISCAL_YEAR': 'Fiscal Year'})
+
+with open('all_salaries.pickle', 'wb') as file1:
+    pickle.dump(all_salaries, file1)
 
 
 
