@@ -1,7 +1,10 @@
 # imports
-from process_data import all_salaries  # import data processing script to get salary df. Replace with i/o
 from dash import Dash, dash_table, html, dcc, callback, Output, Input
 from dash.exceptions import PreventUpdate
+import pickle
+
+with open("all_salaries.pickle", "rb") as input_file:
+    all_salaries = pickle.load(input_file)
 
 # create a list of fiscal year dropdown options
 options = list(range(2013, 2023))
@@ -34,7 +37,7 @@ app.layout = html.Div(
         html.Div(children=[  # main content
             html.Div(children=[  # filters
                 html.Div(children=[  # search bar and text tip
-                    html.Div('What Name or Position Are You Looking For?',
+                    html.Div('Search Salaries',
                              className='search-tip'),
                     dcc.Input(value='Kirby Smart', type='text', minLength=3, debounce=False, id='my-dynamic-input',
                               className='search-bar')
@@ -43,7 +46,9 @@ app.layout = html.Div(
                     html.Div("Year"),
                     dcc.Dropdown(value=2022, options=options, id='my-year-dropdown', maxHeight=200, searchable=False,
                                  className='year-dropdown')
-                ], className="year-filter")
+                ], className="year-filter"),
+                dcc.RadioItems(options=['Name', 'Title', 'Organization'], value='Name', id='my-search-toggle',
+                               className="search-toggle")
             ], className='filters'
             ),
             html.Div(children=
@@ -80,19 +85,25 @@ potential performance improvements:
 3. Commit to displaying one year at a time and save each year's data in a separate df
 """
 
+
 @app.callback(
     Output("tbl", "data"),
     Input("my-year-dropdown", "value"),
-    Input("my-dynamic-input", "value")
+    Input("my-dynamic-input", "value"),
+    Input("my-search-toggle", "value")
 )
-def display_table(year_value, name_value):
-    if not name_value:
+def display_table(year_value, search_value, search_toggle):
+    if not search_value:
         raise PreventUpdate
-    if len(name_value) < 3:  # filtering on too few characters is slow
+    if len(search_value) < 3:  # filtering on too few characters is slow
         raise PreventUpdate
     df_year = all_salaries[all_salaries['Fiscal Year'] == year_value]
-    dff = df_year[(df_year['Name'].str.contains(name_value, case=False, regex=False)
-                   | (df_year['Title'].str.contains(name_value, case=False, regex=False)))]
+    if search_toggle == "Name":
+        dff = df_year[df_year['Name'].str.contains(search_value, case=False, regex=False)]
+    if search_toggle == "Title":
+        dff = df_year[df_year['Title'].str.contains(search_value, case=False, regex=False)]
+    if search_toggle == "Organization":
+        dff = df_year[df_year['Organization'].str.contains(search_value, case=False, regex=False)]
     return dff.to_dict("records")
 
 
