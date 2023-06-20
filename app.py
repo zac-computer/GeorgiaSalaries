@@ -62,12 +62,36 @@ app.layout = html.Div(
                     dict(id='Fiscal Year', name='Fiscal Year', type='numeric')
                 ],
                 data=df_init.to_dict("records"),
-                style_cell={'textAlign': 'left', 'font-family': '"Lato", sans-serif', 'fontSize': 12},
-                style_data_conditional=[
+                tooltip_data=[
                     {
-                        'if': {'row_index': 'odd'},
-                        'backgroundColor': 'RGB(200, 220, 240)',  # stripe rows
-                    }
+                        column: {'value': str(value), 'type': 'markdown'}
+                        for column, value in row.items()
+                    } for row in df_init.to_dict('records')
+                ],
+                tooltip_delay=0,
+                tooltip_duration=None,
+                style_table={'overflowX': 'auto'},
+                style_cell={'textAlign': 'left',
+                            'font-family': '"Lato", sans-serif',
+                            'fontSize': 12,
+                            'textOverflow': 'ellipsis',
+                            'maxWidth': 0,
+                            },
+                style_cell_conditional=[
+                    {'if': {'column_id': 'Name'},
+                     'width': '15%'},
+                    {'if': {'column_id': 'Title'},
+                     'width': '30%'},
+                    {'if': {'column_id': 'Organization'},
+                     'width': '30%'},
+                    {'if': {'column_id': 'Salary'},
+                     'width': '15%'},
+                    {'if': {'column_id': 'Fiscal Year'},
+                     'width': '10%'},
+                ],
+                style_data_conditional=[
+                    {'if': {'row_index': 'odd'},
+                     'backgroundColor': 'RGB(200, 220, 240)'}  # stripe rows
                 ]
             ),
                 className='table'
@@ -88,6 +112,7 @@ potential performance improvements:
 
 @app.callback(
     Output("tbl", "data"),
+    Output("tbl", "tooltip_data"),
     Input("my-year-dropdown", "value"),
     Input("my-dynamic-input", "value"),
     Input("my-search-toggle", "value")
@@ -104,7 +129,15 @@ def display_table(year_value, search_value, search_toggle):
         dff = df_year[df_year['Title'].str.contains(search_value, case=False, regex=False)]
     if search_toggle == "Organization":
         dff = df_year[df_year['Organization'].str.contains(search_value, case=False, regex=False)]
-    return dff.to_dict("records")
+
+    # update tooltip list
+    new_tooltip_list = [
+        {
+            column: {'value': str(value), 'type': 'text'}
+            for column, value in row.items()
+        } for row in dff.to_dict('records')
+    ]
+    return dff.to_dict("records"), new_tooltip_list
 
 
 if __name__ == '__main__':
