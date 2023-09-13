@@ -6,8 +6,9 @@ import pickle
 with open("all_salaries.pickle", "rb") as input_file:
     all_salaries = pickle.load(input_file)
 
-# create a list of fiscal year dropdown options
-options = list(range(2013, 2023))
+# constants
+YEARS = list(range(2013, 2023)) # values for the year dropdown (based on available data)
+PAGE_SIZE = 15
 
 # create a small initial dataframe to not overwhelm the server!
 df_init = all_salaries.query("Name == 'Kirby Smart' & `Fiscal Year` == 2022")
@@ -44,7 +45,7 @@ app.layout = html.Div(
                 ], className='search-filter'),
                 html.Div(children=[  # year dropdown and text above
                     html.Div("Year"),
-                    dcc.Dropdown(value=2022, options=options, id='my-year-dropdown', maxHeight=200, searchable=False,
+                    dcc.Dropdown(value=2022, options=YEARS, id='my-year-dropdown', maxHeight=200, searchable=False,
                                  className='year-dropdown')
                 ], className="year-filter"),
                 dcc.RadioItems(options=['Name', 'Title', 'Organization'], value='Name', id='my-search-toggle',
@@ -54,6 +55,9 @@ app.layout = html.Div(
             html.Div(children=
             dash_table.DataTable(
                 id='tbl',
+                page_size=PAGE_SIZE,
+                page_action='custom',
+                page_current=0,
                 columns=[
                     dict(id='Name', name='Name'),
                     dict(id='Title', name='Title'),
@@ -115,9 +119,12 @@ potential performance improvements:
     Output("tbl", "tooltip_data"),
     Input("my-year-dropdown", "value"),
     Input("my-dynamic-input", "value"),
-    Input("my-search-toggle", "value")
+    Input("my-search-toggle", "value"),
+    Input("tbl", "page_current")
 )
-def display_table(year_value, search_value, search_toggle):
+def display_table(year_value, search_value, search_toggle, page_current):
+
+    # Filter the entire DF on the search value
     if not search_value:
         raise PreventUpdate
     if len(search_value) < 3:  # filtering on too few characters is slow
@@ -130,13 +137,17 @@ def display_table(year_value, search_value, search_toggle):
     if search_toggle == "Organization":
         dff = df_year[df_year['Organization'].str.contains(search_value, case=False, regex=False)]
 
-    # update tooltip list
+    # Filter dff to just the current page
+    dff = dff.iloc[page_current*PAGE_SIZE:(page_current+ 1)*PAGE_SIZE]
+
+    # Generate a tooltip list for the currently displayed page
     new_tooltip_list = [
         {
             column: {'value': str(value), 'type': 'text'}
             for column, value in row.items()
         } for row in dff.to_dict('records')
     ]
+
     return dff.to_dict("records"), new_tooltip_list
 
 
