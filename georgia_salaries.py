@@ -5,11 +5,11 @@ import pandas as pd
 # import pickle
 
 
-file_url = "https://www.dropbox.com/scl/fi/zi64gecfq5tj98wypf0bu/all_salaries.csv?rlkey=nal9utxtoyoky6skqejgnr57h&dl=1"
+file_url = "https://www.dropbox.com/scl/fi/gh38mug2qbkuvo9p5r5p4/salaries_starting_2018.csv?rlkey=dcq3tzlqvcn4aq8gng38k4ci4&dl=1"
 all_salaries = pd.read_csv(file_url)
 
 # constants
-YEARS = list(range(2013, 2023)) # values for the year dropdown (based on available data)
+YEARS = list(range(2018, 2023)) # values for the year dropdown (based on available data)
 PAGE_SIZE = 15
 
 # create a small initial dataframe to not overwhelm the server!
