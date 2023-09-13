@@ -9,7 +9,7 @@ file_url = "https://www.dropbox.com/scl/fi/zi64gecfq5tj98wypf0bu/all_salaries.cs
 all_salaries = pd.read_csv(file_url)
 
 # constants
-YEARS = list(range(2013, 2023)) # values for the year dropdown (based on available data)
+YEARS = list(range(2022, 2012, -1))  # values for the year dropdown (based on available data)
 PAGE_SIZE = 15
 
 # create a small initial dataframe to not overwhelm the server!
