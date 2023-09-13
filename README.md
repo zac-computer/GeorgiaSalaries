@@ -26,9 +26,9 @@ I went to ASU, where former students put together a [great salary website](https
 
 I figured I could build a better site for Georgia's salaries, so I did! 
 
-[georgiasalaries.onrender.com](georgiasalaries.onrender.com)
+[georgiasalaries.onrender.com](https://georgiasalaries.onrender.com)
 
 <img width="750" alt="image" src="https://github.com/benmuhlmann/GeorgiaSalaries/assets/36239418/f6e05e4e-dd41-46f4-9f1b-0005729c3e7d">
 
 
-Try using the [original site](https://open.ga.gov/openga/salaryTravel/index) side by side with [my version](georgiasalaries.onrender.com) and let me know what you think!
+Try using the [original site](https://open.ga.gov/openga/salaryTravel/index) side by side with [my version](https://georgiasalaries.onrender.com) and let me know what you think!
