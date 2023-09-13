@@ -31,6 +31,8 @@ external_stylesheets = [
 
 # I should make a visual of the layout
 app = Dash(__name__, external_stylesheets=external_stylesheets)
+server = app.server
+
 app.title = 'GA Salaries'
 app.layout = html.Div(
     children=[  # header
