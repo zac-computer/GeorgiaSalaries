@@ -1,10 +1,12 @@
 # imports
 from dash import Dash, dash_table, html, dcc, callback, Output, Input
 from dash.exceptions import PreventUpdate
-import pickle
+import pandas as pd
+# import pickle
 
-with open("all_salaries.pickle", "rb") as input_file:
-    all_salaries = pickle.load(input_file)
+
+file_url = "https://www.dropbox.com/scl/fi/zi64gecfq5tj98wypf0bu/all_salaries.csv?rlkey=nal9utxtoyoky6skqejgnr57h&dl=1"
+all_salaries = pd.read_csv(file_url)
 
 # constants
 YEARS = list(range(2013, 2023)) # values for the year dropdown (based on available data)
@@ -137,7 +139,7 @@ def display_table(year_value, search_value, search_toggle, page_current):
     if search_toggle == "Organization":
         dff = df_year[df_year['Organization'].str.contains(search_value, case=False, regex=False)]
 
-    # Filter dff to just the current page
+    # Filter dff to just the current page - huge performance improvements with backend pagination
     dff = dff.iloc[page_current*PAGE_SIZE:(page_current+ 1)*PAGE_SIZE]
 
     # Generate a tooltip list for the currently displayed page
