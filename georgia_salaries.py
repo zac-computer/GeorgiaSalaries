@@ -13,7 +13,8 @@ YEARS = list(range(2022, 2012, -1))  # values for the year dropdown (based on av
 PAGE_SIZE = 15
 
 # create a small initial dataframe to not overwhelm the server!
-df_init = all_salaries.query("Name == 'Kirby Smart' & `Fiscal Year` == 2022")
+# df_init = all_salaries.query("Name == 'Kirby Smart' & `Fiscal Year` == 2022")
+df_init = all_salaries.query("`Fiscal Year` == 2022").iloc[0:16]
 
 # define a format for salaries
 money = dash_table.FormatTemplate.money(0)
@@ -44,7 +45,7 @@ app.layout = html.Div(
                 html.Div(children=[  # search bar and text tip
                     html.Div('Search Salaries',
                              className='search-tip'),
-                    dcc.Input(value='Kirby Smart', type='text', minLength=3, debounce=False, id='my-dynamic-input',
+                    dcc.Input(type='text', debounce=False, id='my-dynamic-input',
                               className='search-bar')
                 ], className='search-filter'),
                 html.Div(children=[  # year dropdown and text above
@@ -127,18 +128,29 @@ potential performance improvements:
     Input("tbl", "page_current")
 )
 def display_table(year_value, search_value, search_toggle, page_current):
+    """
+    Callback function for table filtering and displaying based on user inputs.
+    Defaults to unfiltered data when nothing is inputted in the search bar
 
-    # Filter the entire DF on the search value
-    if not search_value:
-        raise PreventUpdate
-    if len(search_value) < 3:  # filtering on too few characters is slow
-        raise PreventUpdate
+    :param year_value: the year selected from the dropdown
+    :param search_value: the user's inputted search value (text)
+    :param search_toggle: Name, Title, or Organization
+    :param page_current: The selected data page
+    :return: A dataframe to be displayed, and a list of tooltip values
+    """
+
     df_year = all_salaries[all_salaries['Fiscal Year'] == year_value]
-    if search_toggle == "Name":
+
+    # If there's no search value, display everything
+    if not search_value:
+        dff = df_year
+
+    # otherwise, filter based on the user's search
+    elif search_toggle == "Name":
         dff = df_year[df_year['Name'].str.contains(search_value, case=False, regex=False)]
-    if search_toggle == "Title":
+    elif search_toggle == "Title":
         dff = df_year[df_year['Title'].str.contains(search_value, case=False, regex=False)]
-    if search_toggle == "Organization":
+    elif search_toggle == "Organization":
         dff = df_year[df_year['Organization'].str.contains(search_value, case=False, regex=False)]
 
     # Filter dff to just the current page - huge performance improvements with backend pagination
