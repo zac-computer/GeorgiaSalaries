@@ -107,7 +107,11 @@ app.layout = html.Div(
             )
         ],
             className='main-content'),
-        html.Footer(children="Ben Muhlmann. 2023", className='footer')
+        html.Footer(children=[html.A("Ben Muhlmann",
+                                     href="https://github.com/benmuhlmann/GeorgiaSalaries",
+                                     target="_blank"),
+                              html.Span(" 2023")],
+                    className='footer')
     ])
 
 # callback to filter by year and name and title
