@@ -1,3 +1,10 @@
 .DS_Store
 .idea/
 To-Do.txt
+
+venv/
+.env
+archive/
+**/data/raw/**
+
+# **/*_archive.*

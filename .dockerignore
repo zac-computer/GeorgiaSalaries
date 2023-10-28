@@ -1,0 +1,5 @@
+venv
+archive/
+**/data/raw/**
+
+**/*_archive.*
