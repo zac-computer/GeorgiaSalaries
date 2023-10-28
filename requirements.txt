@@ -1,3 +1,4 @@
-dash==2.9.3
-pandas==1.3.5
+dash
+pandas
 gunicorn
+python-dotenv
